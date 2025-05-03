@@ -7,8 +7,10 @@ import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner leitura = new Scanner(System.in);
@@ -41,6 +43,27 @@ public class Principal {
 //            }
 //        }
 
+
         temporadas.forEach(t -> t.episodio().forEach(e -> System.out.println(e.titulo())));
+
+//        nomes.stream()
+//                .sorted()
+//                .limit(3)
+//                .filter(n -> n.startsWith("N"))
+//                .map(n -> n.toUpperCase())
+//                .forEach(System.out::println);
+
+//        nomes.stream().sorted().limit(3).filter(n -> n.startsWith("N")).map(n -> n.toUpperCase()).forEach(System.out::println);
+
+        List<DadosEpisodio> dadosEpisodios = temporadas.stream()
+                .flatMap(t -> t.episodio().stream())
+                .collect(Collectors.toList());
+
+        System.out.println("\n Top 5 episódios");
+        dadosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equals("N/A"))
+                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+                .limit(5)
+                .forEach(System.out::println);
     }
 }
