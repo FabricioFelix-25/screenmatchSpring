@@ -109,5 +109,13 @@ if (episodioBuscado.isPresent()){
 //                                " Data lançamento: " + e.getDataLançamento().format(formatador)
 //                ));
 
+        ;
+
+Map<Integer, Double> avaliacaoPorTemporada = episodios.stream()
+        .filter(e -> e.getAvaliacao() != null)
+        .collect(Collectors.groupingBy(Episodio::getTemporada,
+                Collectors.averagingDouble(Episodio::getNumeroEpisodio)));
+        System.out.println(avaliacaoPorTemporada);
+
     }
 }
