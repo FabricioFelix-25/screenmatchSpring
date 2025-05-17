@@ -34,7 +34,13 @@ public class Serie {
         }
 
 
-        this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
+        String generoStr = dadosSerie.genero();
+        if (generoStr != null && !generoStr.isEmpty()) {
+            this.genero = Categoria.fromString(generoStr.split(",")[0].trim());
+        } else {
+            this.genero = Categoria.fromString("Não categorizado");
+        }
+
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
         this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
