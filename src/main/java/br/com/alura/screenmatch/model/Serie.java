@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.model;
 
+import br.com.alura.screenmatch.service.ConsultaChatGPT;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jdk.jfr.Category;
 
@@ -25,12 +26,18 @@ public class Serie {
     public Serie(DadosSerie dadosSerie) {
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
-        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0.0);
+        try {
+            this.avaliacao = dadosSerie.avaliacao() != null ?
+                    Double.valueOf(dadosSerie.avaliacao()) : 0.0;
+        } catch (NumberFormatException e) {
+            this.avaliacao = 0.0;
+        }
+
 
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = dadosSerie.sinopse();
+        this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
 
 
     }
