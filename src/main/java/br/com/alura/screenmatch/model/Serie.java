@@ -45,9 +45,9 @@ public class Serie {
         this.totalTemporadas = dadosSerie.totalTemporadas();
         try {
             this.avaliacao = dadosSerie.avaliacao() != null ?
-                    Double.valueOf(dadosSerie.avaliacao()) : 0.0;
+                    Double.valueOf(dadosSerie.avaliacao()) : (Double) 0.0;
         } catch (NumberFormatException e) {
-            this.avaliacao = 0.0;
+            this.avaliacao = (Double) 0.0;
         }
 
 
