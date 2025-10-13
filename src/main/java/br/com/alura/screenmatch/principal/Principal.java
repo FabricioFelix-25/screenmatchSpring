@@ -43,6 +43,7 @@ public class Principal {
                     6 - Top 5 Series
                     7 - Buscar Series Por Categorias
                     8 - Filtrar séries
+                    9 - Buscar episódios por trecho
                     
                     0 - Sair                                 
                     """;
@@ -75,6 +76,9 @@ public class Principal {
                     break;
                 case 8:
                     filtrarSeriesPorTemporadaEAvaliacao();
+                    break;
+                case 9:
+                    buscarEpisodioPorTrecho();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -181,12 +185,18 @@ listarSeriesBuscadas();
     }
 
     private void buscarSeriesPorCategoria() {
-        System.out.println("Qual O genero da serie?");
+        System.out.println("Qual o gênero que você deseja buscar?");
         var nomeGenero = leitura.nextLine();
-        Categoria categoria = Categoria.fromString(nomeGenero);
-        List<Serie> seriePorCategoria = repository.findByGenero(categoria);
-        System.out.println("Series da categoria: " + nomeGenero);
-        seriePorCategoria.forEach(System.out::println);
+
+        try { // <-- Tentar executar o código arriscado
+            Categoria categoria = Categoria.fromString(nomeGenero);
+            List<Serie> seriePorCategoria = repository.findByGenero(categoria);
+            System.out.println("Séries da categoria: " + nomeGenero);
+            seriePorCategoria.forEach(System.out::println);
+        } catch (IllegalArgumentException e) { // <-- Se der erro, capture-o!
+            // E execute este código seguro no lugar:
+            System.out.println("Ops, gênero não encontrado! Verifique se você digitou um dos gêneros válidos.");
+        }
     }
 
     private void filtrarSeriesPorTemporadaEAvaliacao(){
@@ -201,4 +211,19 @@ listarSeriesBuscadas();
         filtroSeries.forEach(s ->
                 System.out.println(s.getTitulo() + "  - avaliação: " + s.getAvaliacao()));
     }
+
+//Código omitido
+
+    private void buscarEpisodioPorTrecho(){
+        System.out.println("Qual o nome do episódio para busca?");
+        var trechoEpisodio = leitura.nextLine();
+        List<Episodio> episodiosEncontrados = repository.episodiosPorTrecho(trechoEpisodio);
+        episodiosEncontrados.forEach(e ->
+                System.out.printf("Série: %s Temporada %s - Episódio %s - %s\n",
+                        e.getSerie().getTitulo(), e.getTemporada(),
+                        e.getNumeroEpisodio(), e.getTitulo()));
+
+}
+
+
 }

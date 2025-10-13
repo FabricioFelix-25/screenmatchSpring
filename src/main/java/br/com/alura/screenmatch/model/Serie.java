@@ -52,11 +52,19 @@ public class Serie {
 
 
         String generoStr = dadosSerie.genero();
-        if (generoStr != null && !generoStr.isEmpty()) {
-            this.genero = Categoria.fromString(generoStr.split(",")[0].trim());
+        if (generoStr != null && !generoStr.trim().isEmpty()) {
+            try {
+                // Tenta pegar a primeira categoria da lista (ex: "Action, Drama" -> "Action")
+                this.genero = Categoria.fromString(generoStr.split(",")[0].trim());
+            } catch (IllegalArgumentException e) {
+                // Se a categoria da API não estiver no nosso enum, usamos o padrão
+                this.genero = Categoria.NAO_DEFINIDO;
+            }
         } else {
-            this.genero = Categoria.fromString("Não categorizado");
+            // Se não vier gênero nenhum da API, usamos o padrão
+            this.genero = Categoria.NAO_DEFINIDO;
         }
+
 
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();

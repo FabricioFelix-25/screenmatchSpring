@@ -6,21 +6,34 @@ public enum Categoria {
     ROMANCE("Romance", "Romance"),
     COMEDIA("Comedy", "Comédia"),
     DRAMA("Drama", "Drama"),
-    CRIME("Crime", "Crime");
+    CRIME("Crime", "Crime"),
+    NAO_DEFINIDO("N/A", "Não Definido");
 
-    private String categoriaOmdb;
+    private final String categoriaOmdb;
+    private final String categoriaPortugues;
 
-    private String categoriaPortugues;
     Categoria(String categoriaOmdb, String categoriaPortugues) {
-    this.categoriaOmdb = categoriaOmdb;
-    this.categoriaPortugues = categoriaPortugues;
-}
+        this.categoriaOmdb = categoriaOmdb;
+        this.categoriaPortugues = categoriaPortugues;
+    }
 
+    // Getter para o nome da categoria em português
+    public String getCategoriaPortugues() {
+        return categoriaPortugues;
+    }
+
+    /**
+     * Converte uma String (seja em inglês ou português) para o enum Categoria correspondente.
+     * Não diferencia maiúsculas de minúsculas.
+     *
+     * @param text A string a ser convertida.
+     * @return O enum Categoria correspondente.
+     * @throws IllegalArgumentException se nenhuma categoria for encontrada.
+     */
     public static Categoria fromString(String text) {
         for (Categoria categoria : Categoria.values()) {
-            if (categoria.categoriaOmdb.equalsIgnoreCase(text)) {
-                return categoria;
-            } else if (categoria.categoriaPortugues.equalsIgnoreCase(text)) {
+            if (categoria.categoriaOmdb.equalsIgnoreCase(text) ||
+                    categoria.categoriaPortugues.equalsIgnoreCase(text)) {
                 return categoria;
             }
         }
