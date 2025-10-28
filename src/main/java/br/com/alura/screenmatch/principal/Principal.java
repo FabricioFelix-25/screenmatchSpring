@@ -104,7 +104,7 @@ public class Principal {
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
         Serie serie = new Serie(dados);
-        dadosSeries.add(dados);
+     //   dadosSeries.add(dados);
         repository.save(serie);
         System.out.println(dados);
     }

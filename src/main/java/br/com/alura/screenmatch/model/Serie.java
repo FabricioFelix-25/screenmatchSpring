@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 
 @Entity
 @Table(name = "series")
@@ -15,7 +16,6 @@ public class Serie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private  String titulo;
 
     private Integer totalTemporadas;
@@ -35,42 +35,18 @@ public class Serie {
      private List<Episodio> episodios = new ArrayList<>();
 
 
-    public Serie() {
-
-    }
+    public Serie() {}
 
     public Serie(DadosSerie dadosSerie) {
 
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
-        try {
-            this.avaliacao = dadosSerie.avaliacao() != null ?
-                    Double.valueOf(dadosSerie.avaliacao()) : (Double) 0.0;
-        } catch (NumberFormatException e) {
-            this.avaliacao = (Double) 0.0;
-        }
-
-
-        String generoStr = dadosSerie.genero();
-        if (generoStr != null && !generoStr.trim().isEmpty()) {
-            try {
-                // Tenta pegar a primeira categoria da lista (ex: "Action, Drama" -> "Action")
-                this.genero = Categoria.fromString(generoStr.split(",")[0].trim());
-            } catch (IllegalArgumentException e) {
-                // Se a categoria da API não estiver no nosso enum, usamos o padrão
-                this.genero = Categoria.NAO_DEFINIDO;
-            }
-        } else {
-            // Se não vier gênero nenhum da API, usamos o padrão
-            this.genero = Categoria.NAO_DEFINIDO;
-        }
-
-
+        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
         this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
-
     }
+
 
     public Long getId() {
         return id;
