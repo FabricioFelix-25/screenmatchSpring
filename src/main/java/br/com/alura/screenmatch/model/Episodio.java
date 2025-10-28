@@ -16,7 +16,7 @@ public class Episodio {
     private String titulo;
     private Integer numeroEpisodio;
     private Double avaliacao;
-    private LocalDate dataLançamento;
+    private LocalDate dataLancamento;
 
     @ManyToOne
     private Serie serie;
@@ -36,9 +36,9 @@ public class Episodio {
         }
         try {
 
-        this.dataLançamento = LocalDate.parse(dadosEpisodio.dataLançamento());
+        this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
         } catch (Exception e) {
-            this.dataLançamento = null;
+            this.dataLancamento = null;
         }
     }
 
@@ -58,12 +58,12 @@ public class Episodio {
         this.serie = serie;
     }
 
-    public LocalDate getDataLançamento() {
-        return dataLançamento;
+    public LocalDate dataLancamento() {
+        return dataLancamento;
     }
 
-    public void setDataLançamento(LocalDate dataLançamento) {
-        this.dataLançamento = dataLançamento;
+    public void dataLancamento(LocalDate dataLancamento) {
+        this.dataLancamento = dataLancamento;
     }
 
     public Double getAvaliacao() {
@@ -105,7 +105,7 @@ public class Episodio {
                 ", titulo= " + titulo + '\'' +
                 ", numeroEpisodio= " + numeroEpisodio +
                 ", avaliacao= " + avaliacao + '\'' +
-                ", dataLançamento= " + dataLançamento ;
+                ", dataLançamento= " + dataLancamento ;
 
     }
 }
