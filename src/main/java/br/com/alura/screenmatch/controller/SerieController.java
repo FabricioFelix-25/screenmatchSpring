@@ -18,9 +18,15 @@ private SerieService servico;
 
     @GetMapping("/series")
     public List<SerieDTO> obterSeries() {
-return servico.obterTodasAsSeries();
+        return servico.obterTodasAsSeries();
     }
 
+
+
+    @GetMapping("/series/top5")
+    public List<SerieDTO> obterSeriesTop5() {
+        return servico.obterTop5Series();
+    }
 
 
 }
