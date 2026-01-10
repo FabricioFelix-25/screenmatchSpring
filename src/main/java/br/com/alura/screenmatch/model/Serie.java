@@ -45,6 +45,13 @@ public class Serie {
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
         this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+
+        try {
+            this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
+        } catch (IllegalArgumentException e) {
+            // Se vier um gênero que não está no seu Enum, definimos como null ou tratamos
+            this.genero = null;
+        }
     }
 
 

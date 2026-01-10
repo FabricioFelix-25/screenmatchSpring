@@ -104,8 +104,28 @@ public class Principal {
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
         Serie serie = new Serie(dados);
-     //   dadosSeries.add(dados);
-        repository.save(serie);
+
+        // --- CÓDIGO NOVO: Buscando os episódios ANTES de salvar ---
+        List<DadosTemporada> temporadas = new ArrayList<>();
+
+        for (int i = 1; i <= dados.totalTemporadas(); i++) {
+            // Busca os dados da temporada na API
+            var json = consumo.obterDados(ENDERECO + serie.getTitulo().replace(" ", "+") + "&season=" + i + API_KEY);
+            DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
+            temporadas.add(dadosTemporada);
+        }
+
+        // Converte de DadosTemporada para Lista de Episodios
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(d -> d.episodio().stream()
+                        .map(e -> new Episodio(d.numero(), e)))
+                .collect(Collectors.toList());
+
+        // Vincula os episódios à série
+        serie.setEpisodios(episodios);
+        // -----------------------------------------------------------
+
+        repository.save(serie); // AGORA SIM: Salva a série COM os episódios dentro
         System.out.println(dados);
     }
 
